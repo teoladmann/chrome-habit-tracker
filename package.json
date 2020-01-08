@@ -1,0 +1,22 @@
+{
+  "name": "chrome-habit-tracker",
+  "version": "1.0.0",
+  "description": "A Chrome Extension to keep track of habits.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teoladmann/chrome-habit-tracker.git"
+  },
+  "author": "Timoteo Ladmann",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/teoladmann/chrome-habit-tracker/issues"
+  },
+  "homepage": "https://github.com/teoladmann/chrome-habit-tracker#readme",
+  "dependencies": {
+    "eslint": "^6.8.0"
+  }
+}

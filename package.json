@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/teoladmann/chrome-habit-tracker#readme",
   "dependencies": {
-    "eslint": "^6.8.0"
+    "browser-sync": "^2.26.7",
+    "eslint": "^6.8.0",
+    "gulp": "^4.0.2"
   }
 }

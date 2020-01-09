@@ -1,6 +1,7 @@
 'use strict'
 
 let habitCount = 0;
+let actualDays = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
   setGrid(new Date().getMonth());
@@ -10,7 +11,7 @@ const getDaysInMonth = (month) => {
   return new Date(new Date().getFullYear(), month + 1, 0).getDate();
 }
 
-const createNode = (type, classGiven, text, id) => {
+const createNode = (type, classGiven) => {
   const node = document.createElement(type);
   node.className = classGiven;
   return node;
@@ -18,11 +19,12 @@ const createNode = (type, classGiven, text, id) => {
 
 const setGrid = (month) => {
 
-  const daysInMonth = getDaysInMonth(month);
+  const daysInMonth = actualDays = getDaysInMonth(month);
 
   const gridContainerNode = createNode('div', 'grid-main-container');
   gridContainerNode.setAttribute('id', 'grid-main-container');
-  gridContainerNode.style['grid-template'] = `repeat(2, 1fr) / 225px repeat(${daysInMonth}, 1fr)`;
+  gridContainerNode.style['grid-template-rows'] = 'repeat(2, 1fr)';
+  gridContainerNode.style['grid-template-columns'] = `225px repeat(${daysInMonth}, 1fr)`;
   document.getElementById('main-title').insertAdjacentElement('afterend', gridContainerNode);
 
   const monthTitleNode = createNode('div', 'month-title title');
@@ -61,6 +63,7 @@ const renderDays = (month) => {
   const daysInMonth = getDaysInMonth(month);
   for (let i = 0; i < daysInMonth; i++) {
     const dayNode = createNode('span', 'day');
+    if (new Date().getMonth() === month && i === new Date().getDate()) dayNode.classList.add('actual-day');
     const textNode = document.createTextNode(String(i + 1));
     dayNode.appendChild(textNode);
     document.getElementById('grid-main-container').appendChild(dayNode);
@@ -70,4 +73,19 @@ const renderDays = (month) => {
 const selectMonth = (month) => {
   document.getElementById('grid-main-container').remove();
   setGrid(month);
+}
+
+const addHabit = () => {
+  const habit = prompt('Enter habit:');
+  habitCount += 1;
+  document.getElementById('grid-main-container').style['grid-template-rows'] = `repeat(${2 + habitCount}, 1fr)`;
+  const habitNode = createNode('span', 'habit');
+  const textNode = document.createTextNode(habit);
+  habitNode.appendChild(textNode);
+  document.getElementById('grid-main-container').appendChild(habitNode);
+  for (let i = 0; i < actualDays; i++) {
+    const checkNode = createNode('input', 'check');
+    checkNode.setAttribute('type', 'checkbox');
+    document.getElementById('grid-main-container').appendChild(checkNode);
+  }
 }

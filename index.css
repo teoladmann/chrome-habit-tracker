@@ -61,3 +61,11 @@ button {
 input {
   margin: 0px;
 }
+.actual-day {
+  text-decoration: underline;
+  font-weight: 800;
+}
+.check {
+  align-self: center;
+  justify-self: center;
+}

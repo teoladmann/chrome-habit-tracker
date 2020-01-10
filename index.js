@@ -3,10 +3,6 @@
 let habitCount = 0;
 let actualDays = 0;
 
-document.addEventListener('DOMContentLoaded', () => {
-  setGrid(new Date().getMonth());
-});
-
 const getDaysInMonth = (month) => {
   return new Date(new Date().getFullYear(), month + 1, 0).getDate();
 }
@@ -54,7 +50,7 @@ const renderMonths = (month) => {
     i !== month ? node.className = 'month title' : node.className = 'month title selected-month';
     const textNode = document.createTextNode(months[i]);
     node.appendChild(textNode);
-    node.setAttribute('onclick',`selectMonth(${i})`);
+    node.addEventListener('click', selectMonth);
     document.getElementById('month-container').appendChild(node);
   }
 }
@@ -70,7 +66,8 @@ const renderDays = (month) => {
   }
 }
 
-const selectMonth = (month) => {
+const selectMonth = (e) => {
+  const month = Number(e.target.id.slice(1));
   document.getElementById('grid-main-container').remove();
   setGrid(month);
 }
@@ -89,3 +86,8 @@ const addHabit = () => {
     document.getElementById('grid-main-container').appendChild(checkNode);
   }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('add-habit-button').addEventListener('click', addHabit);
+  setGrid(new Date().getMonth());
+});

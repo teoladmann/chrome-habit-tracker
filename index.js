@@ -1,7 +1,21 @@
-'use strict'
+'use strict';
 
-let habitCount = 0;
-let actualDays = 0;
+let habitStorage = {'habits': []};
+console.log(habitStorage);
+let actualDays;
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  chrome.storage.sync.get('habits', (habits) => {
+    if (habits.hasOwnProperty('habits')) Object.assign(habitStorage, habits);
+    console.log(habitStorage);
+
+    document.getElementById('add-habit-button').addEventListener('click', addHabit);
+
+    setGrid(new Date().getMonth());
+  });
+
+});
 
 const getDaysInMonth = (month) => {
   return new Date(new Date().getFullYear(), month + 1, 0).getDate();
@@ -19,7 +33,7 @@ const setGrid = (month) => {
 
   const gridContainerNode = createNode('div', 'grid-main-container');
   gridContainerNode.setAttribute('id', 'grid-main-container');
-  gridContainerNode.style['grid-template-rows'] = 'repeat(2, 1fr)';
+  gridContainerNode.style['grid-template-rows'] = `repeat(${2 + habitStorage.habits.length}, 1fr)`;
   gridContainerNode.style['grid-template-columns'] = `225px repeat(${daysInMonth}, 1fr)`;
   document.getElementById('main-title').insertAdjacentElement('afterend', gridContainerNode);
 
@@ -39,6 +53,8 @@ const setGrid = (month) => {
   gridContainerNode.appendChild(habitTitleNode);
 
   renderDays(month);
+
+  renderHabits();
 
 }
 
@@ -72,22 +88,41 @@ const selectMonth = (e) => {
   setGrid(month);
 }
 
+const renderHabits = () => {
+  for (let i = 0; i < habitStorage.habits.length; i++) {
+    const habitNode = createNode('span', 'habit');
+    const textNode = document.createTextNode(habitStorage.habits[i].name);
+    habitNode.appendChild(textNode);
+    document.getElementById('grid-main-container').appendChild(habitNode);
+    for (let j = 0; j < actualDays; j++) {
+      const checkNode = createNode('input', 'check');
+      checkNode.setAttribute('type', 'checkbox');
+      document.getElementById('grid-main-container').appendChild(checkNode);
+    }
+  }
+}
+
 const addHabit = () => {
+
   const habit = prompt('Enter habit:');
-  habitCount += 1;
-  document.getElementById('grid-main-container').style['grid-template-rows'] = `repeat(${2 + habitCount}, 1fr)`;
+
+  if (habitStorage.hasOwnProperty('habits')) {
+    habitStorage.habits.push({'name': habit, 'dates': {}});
+  } else {
+    habitStorage = {'habits': [{'name': habit, 'dates': []}]};
+  }
+  chrome.storage.sync.set(habitStorage, () => console.log('Added habit'));
+
+  document.getElementById('grid-main-container').style['grid-template-rows'] = `repeat(${2 + habitStorage.habits.length}, 1fr)`;
   const habitNode = createNode('span', 'habit');
   const textNode = document.createTextNode(habit);
   habitNode.appendChild(textNode);
   document.getElementById('grid-main-container').appendChild(habitNode);
+
   for (let i = 0; i < actualDays; i++) {
     const checkNode = createNode('input', 'check');
     checkNode.setAttribute('type', 'checkbox');
     document.getElementById('grid-main-container').appendChild(checkNode);
   }
-}
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('add-habit-button').addEventListener('click', addHabit);
-  setGrid(new Date().getMonth());
-});
+}

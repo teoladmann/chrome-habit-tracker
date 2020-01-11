@@ -1,14 +1,13 @@
 'use strict';
 
 let habitStorage = {'habits': []};
-console.log(habitStorage);
 let actualDays;
+let monthSelected = new Date().getMonth();
 
 document.addEventListener('DOMContentLoaded', () => {
 
   chrome.storage.sync.get('habits', (habits) => {
     if (habits.hasOwnProperty('habits')) Object.assign(habitStorage, habits);
-    console.log(habitStorage);
 
     document.getElementById('add-habit-button').addEventListener('click', addHabit);
 
@@ -84,6 +83,7 @@ const renderDays = (month) => {
 
 const selectMonth = (e) => {
   const month = Number(e.target.id.slice(1));
+  monthSelected = month;
   document.getElementById('grid-main-container').remove();
   setGrid(month);
 }
@@ -97,20 +97,36 @@ const renderHabits = () => {
     for (let j = 0; j < actualDays; j++) {
       const checkNode = createNode('input', 'check');
       checkNode.setAttribute('type', 'checkbox');
+      checkNode.addEventListener('click', toggleCheck);
       document.getElementById('grid-main-container').appendChild(checkNode);
     }
   }
+}
+
+const toggleCheck = (e) => {
+  const habitClicked = habitStorage.habits[Number(e.target.value.slice(0, 2)) - 1]; // habits arr is 0 - indexed and habits id are 1 - indexed
+  if (habitClicked.dates.hasOwnProperty(e.target.value)) {
+    if (habitClicked.dates[e.target.value] === 0) {
+      habitClicked.dates[e.target.value] = 1;
+    } else {
+      habitClicked.dates[e.target.value] = 0;
+    }
+  } else {
+    habitStorage.habits[Number(e.target.value.slice(0, 2)) - 1].dates[e.target.value] = 1;
+  }
+  chrome.storage.sync.set(habitStorage, () => console.log('Check toggled'));
 }
 
 const addHabit = () => {
 
   const habit = prompt('Enter habit:');
 
-  if (habitStorage.hasOwnProperty('habits')) {
-    habitStorage.habits.push({'name': habit, 'dates': {}});
-  } else {
-    habitStorage = {'habits': [{'name': habit, 'dates': []}]};
-  }
+  const newHabitId = habitStorage.habits.length + 1;
+
+  const year = new Date().getFullYear();
+
+  habitStorage.habits.push({'id': newHabitId, 'name': habit, 'dates': {}});
+
   chrome.storage.sync.set(habitStorage, () => console.log('Added habit'));
 
   document.getElementById('grid-main-container').style['grid-template-rows'] = `repeat(${2 + habitStorage.habits.length}, 1fr)`;
@@ -122,6 +138,12 @@ const addHabit = () => {
   for (let i = 0; i < actualDays; i++) {
     const checkNode = createNode('input', 'check');
     checkNode.setAttribute('type', 'checkbox');
+
+    // input value 'schema': HABIT ID 2 DIGITS | YEAR 4 DIGITS | MONTH 2 DIGITS | DAY 2 DIGITS
+    const dateValue = `${String(newHabitId)}${year}${monthSelected < 10 ? '0' + String(monthSelected + 1) : monthSelected + 1}${i + 1 < 10 ? '0' + String(i + 1) : String(i + 1)}`;
+    const dateValueIdLessThan10 = `0${dateValue}`;
+    checkNode.setAttribute('value', `${newHabitId < 10 ? dateValueIdLessThan10 : dateValue}`);
+    checkNode.addEventListener('click', toggleCheck);
     document.getElementById('grid-main-container').appendChild(checkNode);
   }
 

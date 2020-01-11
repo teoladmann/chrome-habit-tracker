@@ -89,6 +89,7 @@ const selectMonth = (e) => {
 }
 
 const renderHabits = () => {
+  document.getElementById('grid-main-container').style['grid-template-rows'] = `repeat(${2 + habitStorage.habits.length}, 1fr)`;
   for (let i = 0; i < habitStorage.habits.length; i++) {
     const habitNode = createNode('span', 'habit');
     const textNode = document.createTextNode(habitStorage.habits[i].name);
@@ -97,6 +98,12 @@ const renderHabits = () => {
     for (let j = 0; j < actualDays; j++) {
       const checkNode = createNode('input', 'check');
       checkNode.setAttribute('type', 'checkbox');
+      checkNode.addEventListener('click', toggleCheck);
+      document.getElementById('grid-main-container').appendChild(checkNode);
+      // input value 'schema': HABIT ID 2 DIGITS | YEAR 4 DIGITS | MONTH 2 DIGITS | DAY 2 DIGITS
+      const dateValue = `${String(habitStorage.habits[i].id)}${new Date().getFullYear()}${monthSelected < 10 ? '0' + String(monthSelected + 1) : monthSelected + 1}${j + 1 < 10 ? '0' + String(j + 1) : String(j + 1)}`;
+      const dateValueIdLessThan10 = `0${dateValue}`;
+      checkNode.setAttribute('value', `${habitStorage.habits[i].id < 10 ? dateValueIdLessThan10 : dateValue}`);
       checkNode.addEventListener('click', toggleCheck);
       document.getElementById('grid-main-container').appendChild(checkNode);
     }
@@ -118,33 +125,11 @@ const toggleCheck = (e) => {
 }
 
 const addHabit = () => {
-
   const habit = prompt('Enter habit:');
-
   const newHabitId = habitStorage.habits.length + 1;
-
-  const year = new Date().getFullYear();
-
   habitStorage.habits.push({'id': newHabitId, 'name': habit, 'dates': {}});
-
   chrome.storage.sync.set(habitStorage, () => console.log('Added habit'));
 
-  document.getElementById('grid-main-container').style['grid-template-rows'] = `repeat(${2 + habitStorage.habits.length}, 1fr)`;
-  const habitNode = createNode('span', 'habit');
-  const textNode = document.createTextNode(habit);
-  habitNode.appendChild(textNode);
-  document.getElementById('grid-main-container').appendChild(habitNode);
-
-  for (let i = 0; i < actualDays; i++) {
-    const checkNode = createNode('input', 'check');
-    checkNode.setAttribute('type', 'checkbox');
-
-    // input value 'schema': HABIT ID 2 DIGITS | YEAR 4 DIGITS | MONTH 2 DIGITS | DAY 2 DIGITS
-    const dateValue = `${String(newHabitId)}${year}${monthSelected < 10 ? '0' + String(monthSelected + 1) : monthSelected + 1}${i + 1 < 10 ? '0' + String(i + 1) : String(i + 1)}`;
-    const dateValueIdLessThan10 = `0${dateValue}`;
-    checkNode.setAttribute('value', `${newHabitId < 10 ? dateValueIdLessThan10 : dateValue}`);
-    checkNode.addEventListener('click', toggleCheck);
-    document.getElementById('grid-main-container').appendChild(checkNode);
-  }
-
+  document.getElementById('grid-main-container').remove();
+  setGrid(monthSelected);
 }

@@ -104,6 +104,9 @@ const renderHabits = () => {
       const dateValue = `${String(habitStorage.habits[i].id)}${new Date().getFullYear()}${monthSelected < 10 ? '0' + String(monthSelected + 1) : monthSelected + 1}${j + 1 < 10 ? '0' + String(j + 1) : String(j + 1)}`;
       const dateValueIdLessThan10 = `0${dateValue}`;
       checkNode.setAttribute('value', `${habitStorage.habits[i].id < 10 ? dateValueIdLessThan10 : dateValue}`);
+      if (habitStorage.habits[i].dates.hasOwnProperty(checkNode.value) && habitStorage.habits[i].dates[checkNode.value] === 1) {
+        checkNode.setAttribute('checked', true);
+      }
       checkNode.addEventListener('click', toggleCheck);
       document.getElementById('grid-main-container').appendChild(checkNode);
     }

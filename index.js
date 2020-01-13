@@ -74,7 +74,7 @@ const renderDays = (month) => {
   const daysInMonth = getDaysInMonth(month);
   for (let i = 0; i < daysInMonth; i++) {
     const dayNode = createNode('span', 'day');
-    if (new Date().getMonth() === month && i === new Date().getDate()) dayNode.classList.add('actual-day');
+    if (new Date().getMonth() === month && (i + 1) === new Date().getDate()) dayNode.classList.add('actual-day');
     const textNode = document.createTextNode(String(i + 1));
     dayNode.appendChild(textNode);
     document.getElementById('grid-main-container').appendChild(dayNode);

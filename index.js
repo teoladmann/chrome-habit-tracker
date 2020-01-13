@@ -95,8 +95,10 @@ const renderHabits = () => {
     const habitContainerNode = createNode('div', 'habit-container');
     document.getElementById('grid-main-container').appendChild(habitContainerNode);
     habitContainerNode.setAttribute('id', `habit-container-${i + 1}`);
+    habitContainerNode.addEventListener('mouseover', showRemove);
+    habitContainerNode.addEventListener('mouseout', hideRemove);
     const removeNode = createNode('span', 'remove-habit');
-    removeNode.setAttribute('id', `remove${i + 1}`);
+    removeNode.setAttribute('id', `remove-${i + 1}`);
     removeNode.addEventListener('click', removeHabit);
     const removeTextNode = document.createTextNode('X');
     removeNode.appendChild(removeTextNode);
@@ -104,13 +106,14 @@ const renderHabits = () => {
     const habitNode = createNode('span', 'habit');
     const textNode = document.createTextNode(habitStorage.habits[i].name);
     habitNode.appendChild(textNode);
+    habitNode.setAttribute('id', `habit-${i + 1}`);
     document.getElementById(`habit-container-${i + 1}`).appendChild(habitNode);
     for (let j = 0; j < actualDays; j++) {
       const checkNode = createNode('input', 'check');
       checkNode.setAttribute('type', 'checkbox');
       checkNode.addEventListener('click', toggleCheck);
       document.getElementById('grid-main-container').appendChild(checkNode);
-      // input value 'schema': HABIT ID 2 DIGITS | YEAR 4 DIGITS | MONTH 2 DIGITS | DAY 2 DIGITS
+      // input value logic: HABIT ID 2 DIGITS | YEAR 4 DIGITS | MONTH 2 DIGITS | DAY 2 DIGITS
       const dateValue = `${String(habitStorage.habits[i].id)}${new Date().getFullYear()}${monthSelected < 10 ? '0' + String(monthSelected + 1) : monthSelected + 1}${j + 1 < 10 ? '0' + String(j + 1) : String(j + 1)}`;
       const dateValueIdLessThan10 = `0${dateValue}`;
       checkNode.setAttribute('value', `${habitStorage.habits[i].id < 10 ? dateValueIdLessThan10 : dateValue}`);
@@ -152,4 +155,14 @@ const removeHabit = (e) => {
   chrome.storage.sync.set(habitStorage, () => console.log('Removed habit'));
   document.getElementById('grid-main-container').remove();
   setGrid(monthSelected);
+}
+
+const showRemove = (e) => {
+  const idNumber = e.target.id.match(/[0-9]+/gm);
+  document.getElementById('remove-' + idNumber).style['opacity'] = 0.5;
+}
+
+const hideRemove = (e) => {
+  const idNumber = e.target.id.match(/[0-9]+/gm);
+  document.getElementById('remove-' + idNumber).style['opacity'] = 0;
 }

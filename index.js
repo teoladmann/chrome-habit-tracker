@@ -91,10 +91,20 @@ const selectMonth = (e) => {
 const renderHabits = () => {
   document.getElementById('grid-main-container').style['grid-template-rows'] = `repeat(${2 + habitStorage.habits.length}, 1fr)`;
   for (let i = 0; i < habitStorage.habits.length; i++) {
+    habitStorage.habits[i].id = i + 1;
+    const habitContainerNode = createNode('div', 'habit-container');
+    document.getElementById('grid-main-container').appendChild(habitContainerNode);
+    habitContainerNode.setAttribute('id', `habit-container-${i + 1}`);
+    const removeNode = createNode('span', 'remove-habit');
+    removeNode.setAttribute('id', `remove${i + 1}`);
+    removeNode.addEventListener('click', removeHabit);
+    const removeTextNode = document.createTextNode('X');
+    removeNode.appendChild(removeTextNode);
+    document.getElementById(`habit-container-${i + 1}`).appendChild(removeNode);
     const habitNode = createNode('span', 'habit');
     const textNode = document.createTextNode(habitStorage.habits[i].name);
     habitNode.appendChild(textNode);
-    document.getElementById('grid-main-container').appendChild(habitNode);
+    document.getElementById(`habit-container-${i + 1}`).appendChild(habitNode);
     for (let j = 0; j < actualDays; j++) {
       const checkNode = createNode('input', 'check');
       checkNode.setAttribute('type', 'checkbox');
@@ -133,6 +143,13 @@ const addHabit = () => {
   habitStorage.habits.push({'id': newHabitId, 'name': habit, 'dates': {}});
   chrome.storage.sync.set(habitStorage, () => console.log('Added habit'));
 
+  document.getElementById('grid-main-container').remove();
+  setGrid(monthSelected);
+}
+
+const removeHabit = (e) => {
+  habitStorage.habits.splice(Number(e.target.id.slice(6)) - 1, 1);
+  chrome.storage.sync.set(habitStorage, () => console.log('Removed habit'));
   document.getElementById('grid-main-container').remove();
   setGrid(monthSelected);
 }

@@ -131,3 +131,6 @@ input {
 .last-one {
   border-right: 1px solid;
 }
+.first-one {
+  border-left: 1px solid;
+}

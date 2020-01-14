@@ -82,6 +82,7 @@ const renderDays = (month) => {
   const daysInMonth = getDaysInMonth(month);
   for (let i = 0; i < daysInMonth; i++) {
     const dayNode = createNode('span', 'day');
+    if (i === 0) dayNode.classList.add('first-one');
     if (i === daysInMonth - 1) dayNode.classList.add('last-one');
     if (new Date().getMonth() === month && (i + 1) === new Date().getDate()) {
       const actualDayNode = createNode('p', 'actual-day')

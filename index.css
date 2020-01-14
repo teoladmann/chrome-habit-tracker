@@ -128,8 +128,7 @@ input {
 .check-container {
   border-left: 1px solid;
   display: flex;
-  justify-content: flex-start;
-  padding-left: 25%;
+  justify-content: center;
 }
 .check {
   display: none;
@@ -155,7 +154,8 @@ input {
   position: relative;
 }
 .check-container label::before {
-  position: absolute;
+  position: relative;
+  margin: 0 auto;
 }
 .check-container label::after {
     position: absolute;

@@ -61,13 +61,20 @@ const setGrid = (month) => {
 const renderMonths = (month) => {
   const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
   for (let i = 0; i < months.length; i++) {
-    const node = document.createElement('span');
-    node.setAttribute('id', `m${i}`);
-    i !== month ? node.className = 'month title' : node.className = 'month title selected-month';
-    const textNode = document.createTextNode(months[i]);
-    node.appendChild(textNode);
-    node.addEventListener('click', selectMonth);
-    document.getElementById('month-container').appendChild(node);
+    const monthNode = createNode('span', 'month title');
+    monthNode.setAttribute('id', `m${i}`);
+    monthNode.addEventListener('click', selectMonth);
+    if (i === month) {
+      const selectedMonth = createNode('p', 'selected-month month title');
+      const textNode = document.createTextNode(months[i]);
+      selectedMonth.appendChild(textNode);
+      monthNode.appendChild(selectedMonth);
+      document.getElementById('month-container').appendChild(monthNode);
+    } else {
+      const textNode = document.createTextNode(months[i]);
+      monthNode.appendChild(textNode);
+      document.getElementById('month-container').appendChild(monthNode);
+    }
   }
 }
 
@@ -75,10 +82,18 @@ const renderDays = (month) => {
   const daysInMonth = getDaysInMonth(month);
   for (let i = 0; i < daysInMonth; i++) {
     const dayNode = createNode('span', 'day');
-    if (new Date().getMonth() === month && (i + 1) === new Date().getDate()) dayNode.classList.add('actual-day');
-    const textNode = document.createTextNode(String(i + 1));
-    dayNode.appendChild(textNode);
-    document.getElementById('grid-main-container').appendChild(dayNode);
+    if (i === daysInMonth - 1) dayNode.classList.add('last-one');
+    if (new Date().getMonth() === month && (i + 1) === new Date().getDate()) {
+      const actualDayNode = createNode('p', 'actual-day')
+      const textNode = document.createTextNode(String(i + 1));
+      actualDayNode.appendChild(textNode);
+      dayNode.appendChild(actualDayNode);
+      document.getElementById('grid-main-container').appendChild(dayNode);
+    } else {
+      const textNode = document.createTextNode(String(i + 1));
+      dayNode.appendChild(textNode);
+      document.getElementById('grid-main-container').appendChild(dayNode);
+    }
   }
 }
 
@@ -110,10 +125,13 @@ const renderHabits = () => {
     habitNode.setAttribute('id', `habit-${i + 1}`);
     document.getElementById(`habit-container-${i + 1}`).appendChild(habitNode);
     for (let j = 0; j < actualDays; j++) {
+      const checkContainerNode = createNode('div', 'check-container');
       const checkNode = createNode('input', 'check');
       checkNode.setAttribute('type', 'checkbox');
       checkNode.addEventListener('click', toggleCheck);
-      document.getElementById('grid-main-container').appendChild(checkNode);
+      checkContainerNode.appendChild(checkNode);
+      if (j === actualDays - 1) checkContainerNode.classList.add('last-one');
+      document.getElementById('grid-main-container').appendChild(checkContainerNode);
       // input value logic: HABIT ID 2 DIGITS | YEAR 4 DIGITS | MONTH 2 DIGITS | DAY 2 DIGITS
       const dateValue = `${String(habitStorage.habits[i].id)}${new Date().getFullYear()}${monthSelected < 10 ? '0' + String(monthSelected + 1) : monthSelected + 1}${j + 1 < 10 ? '0' + String(j + 1) : String(j + 1)}`;
       const dateValueIdLessThan10 = `0${dateValue}`;
@@ -122,7 +140,7 @@ const renderHabits = () => {
         checkNode.setAttribute('checked', true);
       }
       checkNode.addEventListener('click', toggleCheck);
-      document.getElementById('grid-main-container').appendChild(checkNode);
+      document.getElementById('grid-main-container').appendChild(checkContainerNode);
     }
   }
 }
@@ -173,6 +191,8 @@ const keyInput = (e) => {
   } else if (e.key === 'Enter' && val.length > 0) {
     e.preventDefault();
     addHabit(val);
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
   } else {
     val += String.fromCharCode(e.keyCode);
   }

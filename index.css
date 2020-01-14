@@ -20,23 +20,43 @@ body {
   margin-bottom: 5vh;
 }
 .day {
+  height: 100%;
   font-size: 1.4rem;
-  align-self: center;
-  text-align: center;;
+  text-align: center;
+  vertical-align: middle;
+  display: inline-block;
+  line-height: normal;
 }
 .grid-main-container {
   width: 70%;
   display: grid;
-  row-gap: 2.5vh;
-  margin-bottom: 2.5vh;
+  grid-gap: 0px;
+  margin-bottom: 12px;
+}
+.habit-title, .month-title, .flex-month-container, .day, .check {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+.day {
+  justify-content: center;
 }
 .flex-add-habit-container {
   width: 70%;
 }
-.flex-month-container, .flex-day-container, .checks-container{
+.flex-month-container, .flex-day-container, .checks-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.flex-month-container, .month-title {
+  border-bottom: 1px solid;
+  padding-bottom: 10px;
+}
+.habit-title, .day, .habit-container, .check-container {
+  border-bottom: 1px solid;
+  padding-bottom: 10px;
+  padding-top: 10px;
 }
 .flex-add-habit-container {
   display: flex;
@@ -54,7 +74,9 @@ button {
 }
 .selected-month {
   background-color: #FFD185;
-  padding: 3px;
+  padding: 2px;
+  height: 100%;
+  align-self: center;
 }
 .habit {
   font-size: 1.4rem;
@@ -66,9 +88,7 @@ input {
 }
 .actual-day {
   background-color: #FFD185;
-  padding-top: 2px;
-  padding-bottom: 2px;
-
+  padding: 2px;
 }
 .check {
   align-self: center;
@@ -87,6 +107,8 @@ input {
 }
 .month {
   cursor: pointer;
+  display: flex;
+  align-content: center;
 }
 .habit-input-container {
   width: 70%;
@@ -100,4 +122,12 @@ input {
   font-size: 1.4rem;
   color: #47525E;
   font-family: 'Source Sans Pro', sans-serif;
+}
+.check-container {
+  display: flex;
+  justify-content: center;
+  border-left: 1px solid;
+}
+.last-one {
+  border-right: 1px solid;
 }

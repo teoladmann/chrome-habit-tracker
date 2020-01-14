@@ -1,26 +1,27 @@
 'use strict';
 
-let habitStorage = {'habits': []};
-let actualDays;
-let monthSelected = new Date().getMonth();
+//Declare global variables
+let habitStorage = {'habits': []}; //For updating sync storage
+let actualDays; //Days in selected month for rendering
+let monthSelected = new Date().getMonth(); //Actual month selected 0-indexed
 
 document.addEventListener('DOMContentLoaded', () => {
-
   chrome.storage.sync.get('habits', (habits) => {
+    //Check sync storage
     if (habits.hasOwnProperty('habits')) Object.assign(habitStorage, habits);
-
-    document.getElementById('add-habit-button').addEventListener('click', addHabit);
-
+    //Chrome doesn't allow this to be put directly on index.html
+    document.getElementById('add-habit-button').addEventListener('click', showInput);
+    //Render grid
     setGrid(new Date().getMonth());
   });
 
 });
 
-const getDaysInMonth = (month) => {
+const getDaysInMonth = (month) => { //Month passed as 1-indexed
   return new Date(new Date().getFullYear(), month + 1, 0).getDate();
 }
 
-const createNode = (type, classGiven) => {
+const createNode = (type, classGiven) => { //Shortcut for creating nodes
   const node = document.createElement(type);
   node.className = classGiven;
   return node;
@@ -140,18 +141,45 @@ const toggleCheck = (e) => {
   chrome.storage.sync.set(habitStorage, () => console.log('Check toggled'));
 }
 
-const addHabit = () => {
-  const habit = prompt('Enter habit:');
+const showInput = () => {
+  document.getElementById('add-habit-container').style['display'] = 'none';
+  document.getElementById('habit-input').addEventListener('blur', hideInput);
+  document.getElementById('habit-input').addEventListener('keydown', keyInput);
+  document.getElementById('habit-input-container').style['display'] = 'flex';
+  document.getElementById('habit-input-container').style['align-items'] = 'center';
+  document.getElementById('habit-input').blur();
+  document.getElementById('habit-input').focus();
+}
+
+const addHabit = (habit) => {
   const newHabitId = habitStorage.habits.length + 1;
   habitStorage.habits.push({'id': newHabitId, 'name': habit, 'dates': {}});
   chrome.storage.sync.set(habitStorage, () => console.log('Added habit'));
-
   document.getElementById('grid-main-container').remove();
+  document.getElementById('habit-input').value = '';
+  hideInput();
   setGrid(monthSelected);
 }
 
+const hideInput = () => {
+  document.getElementById('habit-input-container').style['display'] = 'none';
+  document.getElementById('add-habit-container').style['display'] = 'flex';
+}
+
+const keyInput = (e) => {
+  let val = document.getElementById('habit-input').value;
+  if (e.keyCode === 27) {
+    hideInput();
+  } else if (e.key === 'Enter' && val.length > 0) {
+    e.preventDefault();
+    addHabit(val);
+  } else {
+    val += String.fromCharCode(e.keyCode);
+  }
+}
+
 const removeHabit = (e) => {
-  habitStorage.habits.splice(Number(e.target.id.slice(6)) - 1, 1);
+  habitStorage.habits.splice(Number(e.target.id.slice(7)) - 1, 1);
   chrome.storage.sync.set(habitStorage, () => console.log('Removed habit'));
   document.getElementById('grid-main-container').remove();
   setGrid(monthSelected);
@@ -166,3 +194,4 @@ const hideRemove = (e) => {
   const idNumber = e.target.id.match(/[0-9]+/gm);
   document.getElementById('remove-' + idNumber).style['opacity'] = 0;
 }
+

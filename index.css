@@ -53,25 +53,29 @@ button {
   cursor: pointer;
 }
 .selected-month {
-  text-decoration: underline;
+  background-color: #FFD185;
+  padding: 3px;
 }
 .habit {
   font-size: 1.4rem;
   align-self: center;
+  position: absolute;
 }
 input {
   margin: 0px;
 }
 .actual-day {
-  text-decoration: underline;
-  font-weight: 800;
+  background-color: #FFD185;
+  padding-top: 2px;
+  padding-bottom: 2px;
+
 }
 .check {
   align-self: center;
   justify-self: center;
 }
 .remove-habit {
-  left: -6px;
+  left: -7px;
   position: relative;
   opacity: 0;
   cursor: pointer;
@@ -83,4 +87,17 @@ input {
 }
 .month {
   cursor: pointer;
+}
+.habit-input-container {
+  width: 70%;
+  display: none;
+}
+.habit-input {
+  background-color: #F3F1EC;
+  outline: none;
+  border: hidden;
+  width: 220px;
+  font-size: 1.4rem;
+  color: #47525E;
+  font-family: 'Source Sans Pro', sans-serif;
 }

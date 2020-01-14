@@ -126,11 +126,15 @@ const renderHabits = () => {
     habitNode.setAttribute('id', `habit-${i + 1}`);
     document.getElementById(`habit-container-${i + 1}`).appendChild(habitNode);
     for (let j = 0; j < actualDays; j++) {
-      const checkContainerNode = createNode('div', 'check-container');
       const checkNode = createNode('input', 'check');
+      checkNode.setAttribute('id', `checkbox-${i + '-' + j}`);
       checkNode.setAttribute('type', 'checkbox');
       checkNode.addEventListener('click', toggleCheck);
+      const labelCheckNode = document.createElement('label');
+      labelCheckNode.setAttribute('for', `checkbox-${i + '-' + j}`);
+      const checkContainerNode = createNode('div', 'check-container');
       checkContainerNode.appendChild(checkNode);
+      checkContainerNode.appendChild(labelCheckNode);
       if (j === actualDays - 1) checkContainerNode.classList.add('last-one');
       document.getElementById('grid-main-container').appendChild(checkContainerNode);
       // input value logic: HABIT ID 2 DIGITS | YEAR 4 DIGITS | MONTH 2 DIGITS | DAY 2 DIGITS

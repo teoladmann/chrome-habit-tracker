@@ -115,7 +115,7 @@ input {
   outline: none;
   border: hidden;
   width: 220px;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   color: #47525E;
   font-family: 'Source Sans Pro', sans-serif;
 }
@@ -146,6 +146,7 @@ input {
   display: inline-block;
   height: 6px;
   width: 9px;
+  border-color: #FFD185;
   border-left: 2px solid;
   border-bottom: 2px solid;
   transform: rotate(-45deg);
@@ -158,6 +159,8 @@ input {
 }
 .check-container label::after {
     position: absolute;
+    border-color: #00A6FF;
+
 }
 /*Outer-box*/
 .check-container label::before {

@@ -5,7 +5,7 @@
 
   "description": "Add personal habits based on your goals and keep track of them.",
 
-  "manifest_version": 2,
+  "manifest_version": 3,
 
   "chrome_url_overrides": {
     "newtab": "index.html"

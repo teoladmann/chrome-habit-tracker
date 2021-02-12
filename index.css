@@ -183,3 +183,32 @@ input {
 .check-container input.check:focus + label::before {
   outline: rgb(59, 153, 252) auto 5px;
 }
+
+
+/* 
+Non destructive fix to add full background in the day container
+*/
+.check-container{
+    position:relative;
+    padding:0;
+}
+
+.check-container label {
+  height: 100%;
+  width: 100%;
+  /*cursor:pointer;*/
+}
+/* On mouse-over, add a  background color */
+.check-container:hover input ~ label {
+  background-color: green;
+}
+
+/* When the checkbox is checked, add a  background */
+.check-container input:checked ~ label {
+  background-color: green;
+}
+
+/* Remove the original custom checkbox */
+.check-container label::after,.check-container label::before{
+  display:none;
+}

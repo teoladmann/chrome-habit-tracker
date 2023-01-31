@@ -1,7 +1,7 @@
 {
   "name": "Habit Tracker",
 
-  "version": "1.2",
+  "version": "1.4",
 
   "description": "Add personal habits based on your goals and keep track of them.",
 
@@ -11,12 +11,11 @@
     "newtab": "index.html"
   },
 
-  "permissions": [
-     "storage"
-   ],
+  "permissions": ["storage"],
 
-   "icons": {
-     "16": "assets/icon16.png",
-      "48": "assets/icon48.png",
-    "128": "assets/icon128.png" }
+  "icons": {
+    "16": "assets/icon16.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
+  }
 }

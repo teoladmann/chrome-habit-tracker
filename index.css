@@ -1,10 +1,10 @@
 :root {
   font-size: 10px;
   font-family: 'Source Sans Pro', sans-serif;
-  color: #47525E;
+  color: #47525e;
 }
 body {
-  background-color: #F3F1EC;
+  background-color: #f3f1ec;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -33,7 +33,10 @@ body {
   grid-gap: 0px;
   margin-bottom: 12px;
 }
-.habit-title, .month-title, .flex-month-container, .day {
+.habit-title,
+.month-title,
+.flex-month-container,
+.day {
   display: flex;
   align-items: center;
   height: 100%;
@@ -44,16 +47,22 @@ body {
 .flex-add-habit-container {
   width: 70%;
 }
-.flex-month-container, .flex-day-container, .checks-container {
+.flex-month-container,
+.flex-day-container,
+.checks-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.flex-month-container, .month-title {
+.flex-month-container,
+.month-title {
   border-bottom: 1px solid;
   padding-bottom: 10px;
 }
-.habit-title, .day, .habit-container, .check-container {
+.habit-title,
+.day,
+.habit-container,
+.check-container {
   border-bottom: 1px solid;
   padding-bottom: 10px;
   padding-top: 10px;
@@ -67,13 +76,13 @@ button {
   border: none;
   padding: 0px;
   font-size: 1.4rem;
-  color: #47525E;
+  color: #47525e;
   font-weight: 800;
   outline: none;
   cursor: pointer;
 }
 .selected-month {
-  background-color: #FFD185;
+  background-color: #ffd185;
   padding: 2px;
   height: 100%;
   align-self: center;
@@ -87,15 +96,17 @@ input {
   margin: 0px;
 }
 .actual-day {
-  background-color: #FFD185;
+  background-color: #ffd185;
   padding: 2px;
 }
 .remove-habit {
-  left: -7px;
+  left: -20px;
   position: relative;
-  opacity: 0;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 1rem;
+}
+.remove-habit:hover {
+  color: #ff0000;
 }
 .habit-container {
   display: flex;
@@ -111,12 +122,12 @@ input {
   display: none;
 }
 .habit-input {
-  background-color: #F3F1EC;
+  background-color: #f3f1ec;
   outline: none;
   border: hidden;
   width: 220px;
   font-size: 1.6rem;
-  color: #47525E;
+  color: #47525e;
   font-family: 'Source Sans Pro', sans-serif;
 }
 .last-one {
@@ -145,7 +156,7 @@ input {
   display: inline-block;
   height: 6px;
   width: 9px;
-  border-color: #FFD185;
+  border-color: #ffd185;
   border-left: 2px solid;
   border-bottom: 2px solid;
   transform: rotate(-45deg);
@@ -158,18 +169,17 @@ input {
   margin: 0 auto;
 }
 .check-container label::after {
-    position: absolute;
-    border-color: #00A6FF;
-
+  position: absolute;
+  border-color: #00a6ff;
 }
 /*Outer-box*/
 .check-container label::before {
-    top: 3px;
+  top: 3px;
 }
 /*Checkmark*/
 .check-container label::after {
-    left: 4px;
-    top: 7px;
+  left: 4px;
+  top: 7px;
 }
 /*Hide the checkmark by default*/
 .check-container .check + label::after {
@@ -177,7 +187,7 @@ input {
 }
 /*Unhide the checkmark on the checked state*/
 .check-container .check:checked + label::after {
-  content: "";
+  content: '';
 }
 /*Adding focus styles on the outer-box of the fake checkbox*/
 .check-container input.check:focus + label::before {
